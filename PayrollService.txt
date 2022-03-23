@@ -1,0 +1,142 @@
+Enter password: ********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.28 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> create database payroll_service;
+Query OK, 1 row affected (0.07 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| emp                |
+| information_schema |
+| mysql              |
+| payroll_service    |
+| performance_schema |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+8 rows in set (0.09 sec)
+
+mysql> use payroll_service;
+Database changed
+
+mysql> create table employee_payroll
+    -> (
+    ->  id int unsigned NOT NULL AUTO_INCREMENT,
+    -> name varchar(150) NOT NULL,
+    -> salary double NOT NULL,
+    -> start_date DATE NOT NULL,
+    -> primary key (id)
+    -> );
+Query OK, 0 rows affected (0.12 sec)
+
+mysql> insert into employee_payroll(name , salary , start_date) values
+    -> ('James' , 1000.00 , '2018-01-03'),
+    -> ('Siya' , 2000.00 , '2019-04-13'),
+    -> ('Sam' , 3000.00 , '2020-07-23');
+Query OK, 3 rows affected (0.06 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from employee_payroll;
++----+-------+--------+------------+
+| id | name  | salary | start_date |
++----+-------+--------+------------+
+|  1 | James |   1000 | 2018-01-03 |
+|  2 | Siya  |   2000 | 2019-04-13 |
+|  3 | Sam   |   3000 | 2020-07-23 |
++----+-------+--------+------------+
+3 rows in set (0.04 sec)
+
+mysql> select salary from employee_payroll where name='Siya';
++--------+
+| salary |
++--------+
+|   2000 |
++--------+
+1 row in set (0.04 sec)
+
+mysql> select name from employee_payroll where start_date between CAST('2018-01-01' as DATE) and DATE(NOW());
++-------+
+| name  |
++-------+
+| James |
+| Siya  |
+| Sam   |
++-------+
+3 rows in set (0.04 sec)
+
+mysql> alter table employee_payroll add gender char(1) after name;
+Query OK, 0 rows affected (0.16 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> update employee_payroll set gender='M' where name='James' or name='Sam';
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 2  Changed: 0  Warnings: 0
+
+mysql> update employee_payroll set gender='F' where name='Siya';
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from employee_payroll;
++----+-------+--------+--------+------------+
+| id | name  | gender | salary | start_date |
++----+-------+--------+--------+------------+
+|  1 | James | M      |   1000 | 2018-01-03 |
+|  2 | Siya  | F      |   2000 | 2019-04-13 |
+|  3 | Sam   | M      |   3000 | 2020-07-23 |
++----+-------+--------+--------+------------+
+3 rows in set (0.00 sec)
+
+mysql> select sum(salary) from employee_payroll where gender='M' group by gender;
++-------------+
+| sum(salary) |
++-------------+
+|        4000 |
++-------------+
+1 row in set (0.04 sec)
+
+mysql> select avg(salary) from employee_payroll where gender='M' group by gender;
++-------------+
+| avg(salary) |
++-------------+
+|        2000 |
++-------------+
+1 row in set (0.04 sec)
+
+mysql> select min(salary) from employee_payroll where gender='M' group by gender;
++-------------+
+| min(salary) |
++-------------+
+|        1000 |
++-------------+
+1 row in set (0.04 sec)
+
+mysql> select max(salary) from employee_payroll where gender='M' group by gender;
++-------------+
+| max(salary) |
++-------------+
+|        3000 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> select count(salary) from employee_payroll where gender='M' group by gender;
++---------------+
+| count(salary) |
++---------------+
+|             2 |
++---------------+
+1 row in set (0.00 sec)
+
+mysql>

@@ -1,0 +1,91 @@
+Enter password: ********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 13
+Server version: 8.0.28 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> create database address_book;
+Query OK, 1 row affected (0.07 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| emp                |
+| information_schema |
+| mysql              |
+| address_book       |
+| performance_schema |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+8 rows in set (0.09 sec)
+
+mysql> use address_book;
+Database changed
+
+mysql> create table book
+    -> (
+    ->  id int unsigned NOT NULL AUTO_INCREMENT,
+    -> first_name varchar(100) NOT NULL,
+    -> last_name varchar(100) NOT NULL,
+    -> address varchar(100) NOT NULL,
+    -> city varchar(100) NOT NULL,
+    -> state varchar(150) NOT NULL,
+    -> zip int NOT NULL,
+    -> ph_no bigint NOT NULL,
+    -> email varchar(100) NOT NULL,
+    -> primary key (id)
+    -> );
+Query OK, 0 rows affected (0.12 sec)
+
+mysql> insert into book(first_name , last_name , address , city , state , zip , ph_no , email) values
+    -> ('James' , 'Norway' , 'Lane 21 East' , 'Indore' , 'Madhya Pradesh' , 522154 , 9182736450 , 'james@gmail.com'),
+    -> ('Siya' , 'Sathe' , 'Vinkar Society' , 'Pune' , 'Maharashtra' , 879600 , 9876152430 , 'siya@gmail.com'),
+    -> ('Sam' , 'Kala' , 'Building A' , 'Chennai' , 'Tamil Nadu' , 772340 , 9021784365 , 'sam@gmail.com');
+Query OK, 3 rows affected (0.02 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> update book set ph_no=9988776655 where first_name='James';
+Query OK, 2 rows affected (0.04 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> delete from book where first_name='Sam';
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from book;
++----+------------+-----------+----------------+--------+----------------+--------+------------+-----------------+
+| id | first_name | last_name | address        | city   | state          | zip    | ph_no      | email           |
++----+------------+-----------+----------------+--------+----------------+--------+------------+-----------------+
+|  1 | James      | Norway    | Lane 21 East   | Indore | Madhya Pradesh | 522154 | 9988776655 | james@gmail.com |
+|  2 | James      | Norway    | Lane 21 East   | Indore | Madhya Pradesh | 522154 | 9988776655 | james@gmail.com |
+|  3 | Siya       | Sathe     | Vinkar Society | Pune   | Maharashtra    | 879600 | 9876152430 | siya@gmail.com  |
++----+------------+-----------+----------------+--------+----------------+--------+------------+-----------------+
+3 rows in set (0.04 sec)
+
+mysql> select * from book where city='Pune';
++----+------------+-----------+----------------+------+-------------+--------+------------+----------------+
+| id | first_name | last_name | address        | city | state       | zip    | ph_no      | email          |
++----+------------+-----------+----------------+------+-------------+--------+------------+----------------+
+|  3 | Siya       | Sathe     | Vinkar Society | Pune | Maharashtra | 879600 | 9876152430 | siya@gmail.com |
++----+------------+-----------+----------------+------+-------------+--------+------------+----------------+
+1 row in set (0.00 sec)
+
+mysql> select count(city) from book group by city;
++-------------+
+| count(city) |
++-------------+
+|           2 |
+|           1 |
++-------------+
+2 rows in set (0.00 sec)
+
+mysql>
